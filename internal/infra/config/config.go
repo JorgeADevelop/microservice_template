@@ -36,8 +36,10 @@ type KafkaConfig struct {
 	Brokers []string
 }
 
+var ConfigInstance *Config
+
 func NewConfig() *Config {
-	err := godotenv.Load()
+	err := godotenv.Load(".env.local")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -61,6 +63,8 @@ func NewConfig() *Config {
 			Brokers: strings.Split(os.Getenv("KAFKA_BROKERS"), ","),
 		},
 	}
+
+	ConfigInstance = cfg
 
 	return cfg
 }

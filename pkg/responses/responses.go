@@ -18,7 +18,7 @@ type ResponseData struct {
 type HTTPResponse struct {
 	Message string       `json:"message"`
 	Data    any          `json:"data"`
-	Error   error        `json:"error"`
+	Error   *string      `json:"error"`
 	Errors  []HTTPErrors `json:"errors"`
 	Status  string       `json:"status"`
 	Code    int          `json:"code"`
@@ -68,43 +68,53 @@ func GenerateResponse(ctx *gin.Context, responseData ResponseData) {
 			}
 		}
 
+		errString := responseData.Error.Error()
+
 		ctx.JSON(400, HTTPResponse{
 			Message: message,
 			Data:    nil,
-			Error:   responseData.Error,
+			Error:   &errString,
 			Errors:  errors,
 			Status:  "bad request",
 			Code:    400,
 		})
 	case 401:
+		errString := responseData.Error.Error()
+
 		ctx.JSON(401, HTTPResponse{
 			Message: message,
 			Data:    nil,
-			Error:   responseData.Error,
+			Error:   &errString,
 			Status:  "unauthorized",
 			Code:    401,
 		})
 	case 403:
+		errString := responseData.Error.Error()
+
 		ctx.JSON(403, HTTPResponse{
 			Message: message,
 			Data:    nil,
-			Error:   responseData.Error,
+			Error:   &errString,
 			Status:  "forbidden",
 			Code:    403,
 		})
 	case 404:
+		errString := responseData.Error.Error()
+
 		ctx.JSON(404, HTTPResponse{
 			Message: message,
 			Data:    nil,
-			Error:   responseData.Error,
+			Error:   &errString,
 			Status:  "not found",
 			Code:    404,
 		})
 	case 500:
+		errString := responseData.Error.Error()
+
 		ctx.JSON(500, HTTPResponse{
 			Message: message,
 			Data:    nil,
-			Error:   responseData.Error,
+			Error:   &errString,
 			Status:  "internal server error",
 			Code:    500,
 		})

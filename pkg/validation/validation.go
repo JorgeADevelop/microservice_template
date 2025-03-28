@@ -11,7 +11,7 @@ import (
 
 var (
 	uni      *ut.UniversalTranslator
-	validate *validator.Validate
+	Validate *validator.Validate
 	TransES  ut.Translator
 	TransEN  ut.Translator
 )
@@ -33,13 +33,21 @@ func NewValidator() {
 		panic("Cannot get translator for Spanish")
 	}
 
-	validate = validator.New()
+	Validate = validator.New()
 
-	if err := en_translations.RegisterDefaultTranslations(validate, TransEN); err != nil {
+	if err := en_translations.RegisterDefaultTranslations(Validate, TransEN); err != nil {
 		panic(err)
 	}
 
-	if err := es_translations.RegisterDefaultTranslations(validate, TransES); err != nil {
+	if err := es_translations.RegisterDefaultTranslations(Validate, TransES); err != nil {
 		panic(err)
 	}
+
+	if err := RegisterValidations(); err != nil {
+		panic(err)
+	}
+}
+
+func RegisterValidations() error {
+	return nil
 }

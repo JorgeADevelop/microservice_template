@@ -14,16 +14,20 @@ func NewTranslater() {
 
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 
-	bundle.MustLoadMessageFile("pkg/translater/locales/english.json")
-	bundle.MustLoadMessageFile("pkg/translater/locales/spanish.json")
+	bundle.MustLoadMessageFile("pkg/translater/locales/en.json")
+	bundle.MustLoadMessageFile("pkg/translater/locales/es.json")
 
 	Bundle = bundle
 }
 
 func TranslateMessage(lang string, messageID string) string {
 	localizer := i18n.NewLocalizer(Bundle, lang)
-	message, _ := localizer.Localize(&i18n.LocalizeConfig{
+	message, err := localizer.Localize(&i18n.LocalizeConfig{
 		MessageID: messageID,
 	})
+
+	if err != nil {
+		return messageID
+	}
 	return message
 }

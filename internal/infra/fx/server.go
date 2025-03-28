@@ -25,12 +25,19 @@ func StartServer(
 			if err != nil {
 				return err
 			}
-			go srv.Serve(ln)
+			go func() {
+				if serveErr := srv.Serve(ln); serveErr != http.ErrServerClosed {
+					fmt.Printf("Error while starting server: %v\n", serveErr)
+				}
+			}()
 			return nil
 
 		},
 		OnStop: func(ctx context.Context) error {
-			srv.Shutdown(ctx)
+			if err := srv.Shutdown(ctx); err != nil {
+				fmt.Printf("Error while shutting down server: %v\n", err)
+				return err
+			}
 			return nil
 		},
 	})
@@ -38,7 +45,6 @@ func StartServer(
 	return router
 }
 
-// HTTPModule es el módulo FX para configurar el servidor HTTP
 var HTTPModule = fx.Options(
 	fx.Provide(StartServer),
 )

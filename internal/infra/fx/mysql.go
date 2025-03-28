@@ -38,5 +38,4 @@ func CloseDB(db *gorm.DB) {
 
 var DBModule = fx.Options(
 	fx.Provide(NewDB),
-	fx.Invoke(CloseDB),
 )
